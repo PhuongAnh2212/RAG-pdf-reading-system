@@ -1,0 +1,19 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Dependency directories
+*.egg-info/
+dist/
+build/
+
+# Local data or temporary files
+data/*
+*.log
