@@ -7,4 +7,5 @@ faiss-cpu
 transformers
 torch
 pillow
+langchain_community
 sentence-transformers

@@ -3,6 +3,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_community.llms import HuggingFacePipeline
 from transformers import pipeline, AutoTokenizer
+
 def chunk_text(text):
     splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     return splitter.split_text(text)
