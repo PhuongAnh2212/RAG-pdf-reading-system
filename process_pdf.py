@@ -15,37 +15,27 @@ def preprocess_image(img):
     return img
 
 def extract_text_selectable(pdf_path):
-    """Extract text from selectable PDFs."""
     text = ""
-    try:
-        with pdfplumber.open(pdf_path) as pdf:
-            for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text + "\n"
-    except Exception as e:
-        print(f"Error in selectable extraction: {e}")
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + "\n"
     return text
 
 def extract_text_ocr(pdf_path):
-    """Extract text from non-selectable PDFs with improved OCR."""
     text = ""
-    try:
-        pdf = fitz.open(pdf_path)
-        for page in pdf:
-            pix = page.get_pixmap(dpi=300)  # Increase DPI for better resolution
-            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-            img = preprocess_image(img)  # Preprocess image
-            # Use English and Vietnamese languages
-            text += pytesseract.image_to_string(img, lang="eng") + "\n"
-        pdf.close()
-    except Exception as e:
-        print(f"Error in OCR extraction: {e}")
+    pdf = fitz.open(pdf_path)
+    for page in pdf:
+        pix = page.get_pixmap(dpi=150)  # Lower DPI for speed (adjust as needed)
+        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+        text += pytesseract.image_to_string(img) + "\n"
+    pdf.close()
     return text
 
 def process_pdf(pdf_path):
-    """Process a PDF, trying selectable text first, then OCR if needed."""
     text = extract_text_selectable(pdf_path)
-    if not text.strip():  # If no text extracted, use OCR
+    # Only use OCR if selectable text is empty or too short
+    if not text.strip() or len(text) < 50:
         text = extract_text_ocr(pdf_path)
     return text
