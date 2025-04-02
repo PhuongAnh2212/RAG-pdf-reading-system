@@ -11,7 +11,6 @@ st.title("RAG PDF Query System")
 if "vector_stores" not in st.session_state:
     st.session_state["vector_stores"] = {}
 
-# PDF Upload and Processing with Progress Bar
 uploaded_files = st.file_uploader("Upload PDFs", type="pdf", accept_multiple_files=True)
 if uploaded_files:
     progress_bar = st.progress(0)
@@ -35,11 +34,9 @@ if uploaded_files:
     status_text.text(f"All {total_files} PDFs processed and ready for queries!")
     progress_bar.empty()
 
-# Display uploaded PDFs
 if st.session_state["vector_stores"]:
     st.write("**Uploaded PDFs:**", list(st.session_state["vector_stores"].keys()))
 
-# Query Input
 query = st.text_input("Ask a question about the PDFs:")
 if query and st.session_state["vector_stores"]:
     with st.spinner("Generating answer..."):
